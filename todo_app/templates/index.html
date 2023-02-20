@@ -13,7 +13,12 @@
       <ul class="list-group mb-4">
         <!-- List the todo items here -->
         {% for todo_item in todo_items %}
-        <li>{{todo_item.title}}</li>
+        <li>{{todo_item.title}}: {todo_item.status}}:</li>
+        <form action="http://localhost:5000/complete/{{todo_item.title}}" method="post" class="form-complete">
+          <div class="form-complete">
+            <input type="submit" value="Complete">
+          </div>
+        </form>
         {% endfor %}
       </ul>
     </div>

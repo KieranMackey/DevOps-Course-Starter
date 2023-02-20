@@ -17,7 +17,7 @@ _DEFAULT_ITEMS = [
 trello_lists = []
 items = [ ]
 
-def get_list_id_from_name(name, create_list = False):
+def get_list_id_from_name(name):
     query = {
     'key': os.environ.get('TRELLO_API_KEY'),
     'token': os.environ.get('TRELLO_TOKEN'),
@@ -25,14 +25,20 @@ def get_list_id_from_name(name, create_list = False):
 
     response = requests.request(
         "GET",
-        "https://api.trello.com/1/lists/To do",
+        (url + "/lists"),
+        headers=headers,
         params=query,
         verify=False
     )
 
-    # TODO: if there's no 'TO DO' list, create one
-    print("TODO list id: " + str(response.text))
-    return response.text
+    json_resp = response.json()
+    
+    for list in json_resp:
+        if list['name'] == str(name):
+            return list['id']
+
+    #TODO: If the list isn't part of this Trello board, create one
+    return 0
 
 def get_items():
     """
@@ -142,5 +148,38 @@ def save_item(item):
     updated_items = [item if item['id'] == existing_item['id'] else existing_item for existing_item in existing_items]
 
     session['items'] = updated_items
-
     return item
+
+def set_task_status(task, status):
+    '''
+    Uses the 'Update a Card' API
+    '''
+    task_id = ''
+    list_id = get_list_id_from_name(status)
+
+    items = get_items()
+    print("Items: " + str(items))
+    for item in items:
+        print("Title: " + task_id + "Current item: " + item['id'])
+        if item['title'] == task:
+                task_id = item['id']
+
+    card_url = "https://api.trello.com/1/cards/" + task_id
+
+    query = {
+        'key': os.environ.get('TRELLO_API_KEY'),
+        'token': os.environ.get('TRELLO_TOKEN'),
+        'idList' : str(list_id)
+    }
+    print("Query: " + str(query))
+    print("Card ID: " + str(task_id))
+    print("Card url: " + str(card_url))
+    response = requests.request(
+        "PUT",
+        card_url,
+        headers=headers,
+        params=query,
+        verify=False
+    )
+
+    #print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))

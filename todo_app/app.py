@@ -37,6 +37,16 @@ def add_item():
     if request.method == 'GET':
         return redirect(url_for('index'))
 
+@app.route('/complete/<completed_task>', methods = ['POST', 'GET'])
+def complete_item(completed_task):
+    if request.method == 'POST':
+        #completed_task = id
+        print("Completed task: " + str(completed_task))
+        todo_app.data.trello_items.set_task_status(completed_task, 'Done')
+        return redirect(url_for('index'))
+    if request.method == 'GET':
+        return redirect(url_for('index'))
+
 @app.route('/read')
 def read():
     todo_items = todo_app.data.trello_items.get_items()
