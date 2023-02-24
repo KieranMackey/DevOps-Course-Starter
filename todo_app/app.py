@@ -12,17 +12,6 @@ from todo_app.flask_config import Config
 app = Flask(__name__)
 app.config.from_object(Config())
 
-url = "https://api.trello.com/1/boards/" + str(os.environ.get('BOARD_ID'))
-
-headers = {
-  "Accept": "application/json"
-}
-
-query = {
-  'key': os.environ.get('TRELLO_API_KEY'),
-  'token': os.environ.get('TRELLO_TOKEN')
-}
-
 @app.route('/')
 def index():
     todo_items = todo_app.data.trello_items.get_items()
