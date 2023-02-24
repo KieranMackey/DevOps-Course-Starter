@@ -26,10 +26,6 @@ query = {
 @app.route('/')
 def index():
     todo_items = todo_app.data.trello_items.get_items()
-    print(str(todo_items))
-    #todo_items = [Item() for i in range(MaxN)]
-    for todo_item in todo_items:
-        print("Task with name " + todo_item.name)
     return render_template('index.html', todo_items=todo_items)
 
 @app.route('/add', methods = ['POST', 'GET'])
@@ -44,8 +40,6 @@ def add_item():
 @app.route('/complete/<completed_task>', methods = ['POST', 'GET'])
 def complete_item(completed_task):
     if request.method == 'POST':
-        #completed_task = id
-        print("Completed task: " + str(completed_task))
         todo_app.data.trello_items.set_task_status(completed_task, 'Done')
         return redirect(url_for('index'))
     if request.method == 'GET':
@@ -55,15 +49,3 @@ def complete_item(completed_task):
 def read():
     todo_items = todo_app.data.trello_items.get_items()
     return render_template('index.html', todo_items=todo_items)
-
-@app.route('/trello')
-def trello_get():
-    response = requests.request(
-        "GET",
-        url,
-        headers=headers,
-        params=query,
-        verify=False
-    )
-    print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))
-    return redirect(url_for('index'))

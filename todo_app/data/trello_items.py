@@ -119,8 +119,6 @@ def add_item(title):
         if list['name'] == 'To Do':
             list_id = list['id']
 
-    print(str(list_id))
-
     item = { 'id': id, 'title': title, 'status': 'Not Started' }
 
     cards_url = "https://api.trello.com/1/cards"
