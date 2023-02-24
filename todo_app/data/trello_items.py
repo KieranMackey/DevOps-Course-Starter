@@ -3,6 +3,19 @@ import os
 import json
 import requests
 
+# There is currently an issue with https certificate verification, switch to True once fixed
+_HTTPS_VERIFY_CERTIFICATES = False
+
+class Item:
+    def __init__(self, id, name, status = 'To Do'):
+        self.id = id
+        self.name = name
+        self.status = status
+
+    @classmethod
+    def from_trello_card(cls, card, list):
+        return cls(card['id'], card['name'], list['name'])
+
 url = "https://api.trello.com/1/boards/" + str(os.environ.get('BOARD_ID'))
 
 headers = {
@@ -28,7 +41,7 @@ def get_list_id_from_name(name):
         (url + "/lists"),
         headers=headers,
         params=query,
-        verify=False
+        verify=_HTTPS_VERIFY_CERTIFICATES
     )
 
     json_resp = response.json()
@@ -58,13 +71,11 @@ def get_items():
         (url + "/lists"),
         headers=headers,
         params=query,
-        verify=False
+        verify=_HTTPS_VERIFY_CERTIFICATES
     )
 
     items = [ ]
     json_resp = response.json()
-    #print(str(json_resp))
-    #print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))
 
     # Go through cards and store name and ID
     for list in json_resp:
@@ -73,9 +84,7 @@ def get_items():
         trello_list = { 'id': list_id, 'name': list_name }
         trello_lists.append(trello_list)
         for card in list['cards']:
-            #print ("This is a card: " + card['name'])
-            item = { 'id': card['id'], 'title': card['name'], 'list_id': list_id, 'status': list_name }
-            print(str(item))
+            item = Item.from_trello_card(card, trello_list)
             items.append(item)
 
     return items
@@ -128,12 +137,10 @@ def add_item(title):
         cards_url,
         headers=headers,
         params=query,
-        verify=False
+        verify=_HTTPS_VERIFY_CERTIFICATES
     )
     # Add the item to the list
     items.append(item)
-    #session['items'] = items
-    print("add response: " + str(response))
     return item
 
 
@@ -152,17 +159,15 @@ def save_item(item):
 
 def set_task_status(task, status):
     '''
-    Uses the 'Update a Card' API
+    Uses the 'Update a Card' API to set task status (which comes from list name)
     '''
     task_id = ''
     list_id = get_list_id_from_name(status)
 
     items = get_items()
-    print("Items: " + str(items))
     for item in items:
-        print("Title: " + task_id + "Current item: " + item['id'])
-        if item['title'] == task:
-                task_id = item['id']
+        if item.name == task:
+                task_id = item.id
 
     card_url = "https://api.trello.com/1/cards/" + task_id
 
@@ -171,15 +176,11 @@ def set_task_status(task, status):
         'token': os.environ.get('TRELLO_TOKEN'),
         'idList' : str(list_id)
     }
-    print("Query: " + str(query))
-    print("Card ID: " + str(task_id))
-    print("Card url: " + str(card_url))
+
     response = requests.request(
         "PUT",
         card_url,
         headers=headers,
         params=query,
-        verify=False
+        verify=_HTTPS_VERIFY_CERTIFICATES
     )
-
-    #print(json.dumps(json.loads(response.text), sort_keys=True, indent=4, separators=(",", ": ")))

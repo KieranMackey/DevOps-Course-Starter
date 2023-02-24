@@ -26,6 +26,10 @@ query = {
 @app.route('/')
 def index():
     todo_items = todo_app.data.trello_items.get_items()
+    print(str(todo_items))
+    #todo_items = [Item() for i in range(MaxN)]
+    for todo_item in todo_items:
+        print("Task with name " + todo_item.name)
     return render_template('index.html', todo_items=todo_items)
 
 @app.route('/add', methods = ['POST', 'GET'])
