@@ -16,16 +16,9 @@ class Item:
     def from_trello_card(cls, card, list):
         return cls(card['id'], card['name'], list['name'])
 
-url = "https://api.trello.com/1/boards/" + str(os.environ.get('BOARD_ID'))
-
 headers = {
   "Accept": "application/json"
 }
-
-_DEFAULT_ITEMS = [
-    { 'id': 1, 'status': 'Not Started', 'title': 'List saved todo items' },
-    { 'id': 2, 'status': 'Not Started', 'title': 'Allow new items to be added' }
-]
 
 trello_lists = []
 items = [ ]
@@ -35,6 +28,8 @@ def get_list_id_from_name(name):
     'key': os.environ.get('TRELLO_API_KEY'),
     'token': os.environ.get('TRELLO_TOKEN'),
     }
+    
+    url = "https://api.trello.com/1/boards/" + str(os.environ.get('BOARD_ID'))
 
     response = requests.request(
         "GET",
@@ -66,6 +61,8 @@ def get_items():
     'cards' : 'all'
     }
 
+    url = "https://api.trello.com/1/boards/" + str(os.environ.get('BOARD_ID'))
+    
     response = requests.request(
         "GET",
         (url + "/lists"),

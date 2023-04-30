@@ -1,12 +1,7 @@
 from flask import Flask
 from flask import render_template
 from flask import request, redirect, url_for
-import os
-import todo_app.data.session_items
 import todo_app.data.trello_items
-import json
-import requests
-
 from todo_app.flask_config import Config
 
 app = Flask(__name__)
