@@ -9,17 +9,47 @@
 
   <div class="row">
     <div class="col-md-12">
-      <h2>Items</h2>
+      <h2>To do tasks</h2>
       <ul class="list-group mb-4">
         <!-- List the todo items here -->
-        {% for item in view_model.items %}
-        <li>{{item.name}}: {{item.status}}</li>
+        {% for item in view_model.todo_items %}
+        <li>{{item.name}}</li>
+        <!-- TODO: Improve button layout -->
+        <form action="/start/{{item.name}}" method="post" class="form-start">
+          <div class="form-start">
+            <input type="submit" value="Start">
+          </div>
+        </form>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Tasks in progress</h2>
+      <ul class="list-group mb-4">
+        <!-- List the doing items here -->
+        {% for item in view_model.doing_items %}
+        <li>{{item.name}}</li>
         <!-- TODO: Improve button layout -->
         <form action="/complete/{{item.name}}" method="post" class="form-complete">
           <div class="form-complete">
             <input type="submit" value="Complete">
           </div>
         </form>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Completed tasks</h2>
+      <ul class="list-group mb-4">
+        <!-- List the done items here -->
+        {% for item in view_model.done_items %}
+        <li>{{item.name}}</li>
         {% endfor %}
       </ul>
     </div>
