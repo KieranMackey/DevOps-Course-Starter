@@ -1,3 +1,4 @@
+from todo_app.data.trello_items import Item
 class ViewModel:
 
     def __init__(self, items):
@@ -9,4 +10,9 @@ class ViewModel:
     
     @property
     def doing_items(self):
-        return []
+        items = []
+        for item in self._items:
+            if item.status == "Doing":
+                items.append(item)
+
+        return items

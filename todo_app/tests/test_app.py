@@ -11,7 +11,7 @@ def test_doing_items():
 
     # Act
     item_view_model = ViewModel(test_items)
-    todo_items = item_view_model.doing_items()
+    todo_items = item_view_model.doing_items
 
     # Assert
     assert(len(todo_items) == 2)
