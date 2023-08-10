@@ -16,7 +16,7 @@ class Item:
     def from_trello_card(cls, card, list):
         return cls(card['id'], card['name'], list['name'])
 
-headers = {
+default_headers = {
   "Accept": "application/json"
 }
 
@@ -34,7 +34,7 @@ def get_list_id_from_name(name):
     response = requests.request(
         "GET",
         (url + "/lists"),
-        headers=headers,
+        headers=default_headers,
         params=query,
         verify=_HTTPS_VERIFY_CERTIFICATES
     )
@@ -63,10 +63,8 @@ def get_items():
 
     url = "https://api.trello.com/1/boards/" + str(os.environ.get('BOARD_ID'))
     
-    response = requests.request(
-        "GET",
+    response = requests.get(
         (url + "/lists"),
-        headers=headers,
         params=query,
         verify=_HTTPS_VERIFY_CERTIFICATES
     )
@@ -85,21 +83,6 @@ def get_items():
             items.append(item)
 
     return items
-
-
-def get_item(id):
-    """
-    Fetches the saved item with the specified ID.
-
-    Args:
-        id: The ID of the item.
-
-    Returns:
-        item: The saved item, or None if no items match the specified ID.
-    """
-    items = get_items()
-    return next((item for item in items if item['id'] == int(id)), None)
-
 
 def add_item(title):
     """
@@ -130,7 +113,7 @@ def add_item(title):
     response = requests.request(
         "POST",
         cards_url,
-        headers=headers,
+        headers=default_headers,
         params=query,
         verify=_HTTPS_VERIFY_CERTIFICATES
     )
@@ -175,7 +158,7 @@ def set_task_status(task, status):
     response = requests.request(
         "PUT",
         card_url,
-        headers=headers,
+        headers=default_headers,
         params=query,
         verify=_HTTPS_VERIFY_CERTIFICATES
     )
