@@ -9,13 +9,31 @@
 
   <div class="row">
     <div class="col-md-12">
-      <h2>Items</h2>
+      <h2>To do tasks</h2>
       <ul class="list-group mb-4">
         <!-- List the todo items here -->
-        {% for todo_item in todo_items %}
-        <li>{{todo_item.name}}: {{todo_item.status}}</li>
+        {% for item in view_model.todo_items %}
+        <li>{{item.name}}</li>
         <!-- TODO: Improve button layout -->
-        <form action="/complete/{{todo_item.name}}" method="post" class="form-complete">
+        <form action="/start/{{item.name}}" method="post" class="form-start">
+          <div class="form-start">
+            <input type="submit" value="Start">
+          </div>
+        </form>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Tasks in progress</h2>
+      <ul class="list-group mb-4">
+        <!-- List the doing items here -->
+        {% for item in view_model.doing_items %}
+        <li>{{item.name}}</li>
+        <!-- TODO: Improve button layout -->
+        <form action="/complete/{{item.name}}" method="post" class="form-complete">
           <div class="form-complete">
             <input type="submit" value="Complete">
           </div>
@@ -24,11 +42,23 @@
       </ul>
     </div>
   </div>
+
+  <div class="row">
+    <div class="col-md-12">
+      <h2>Completed tasks</h2>
+      <ul class="list-group mb-4">
+        <!-- List the done items here -->
+        {% for item in view_model.done_items %}
+        <li>{{item.name}}</li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
   
   <form action="http://localhost:5000/add" method="post" class="form-todo">
     <div class="form-todo">
-      <label for="todo_item">Enter your task: </label>
-      <input type="text" name="todo_item" id="todo_item" required>
+      <label for="view_model.items">Enter your task: </label>
+      <input type="text" name="view_model.items" id="view_model.items" required>
     </div>
     <div class="form-todo">
       <input type="submit" value="Submit">

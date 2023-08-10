@@ -65,3 +65,5 @@ The managed node can then be provisioned with the command:
 ```bash
 $ ansible-playbook my-ansible-playbook.yml -i my-ansible-inventory.yml 
 ```
+## Running tests
+To run unit and integration tests, run "pytest" in a terminal.
