@@ -55,5 +55,15 @@ You should see output similar to the following:
 ```
 Now visit [`http://localhost:5000/`](http://localhost:5000/) in your web browser to view the app.
 
+## Provisioning for Ansible
+The files my-ansible-inventory.yml, my-ansible-playbook.yml and todoapp.service need to be placed on the control node. This can be done with the scp command:
+```bash
+$ scp [file name]  ec2-user@[control node IP]:
+```
+
+The managed node can then be provisioned with the command:
+```bash
+$ ansible-playbook my-ansible-playbook.yml -i my-ansible-inventory.yml 
+```
 ## Running tests
 To run unit and integration tests, run "pytest" in a terminal.
