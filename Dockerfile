@@ -7,6 +7,7 @@ COPY pyproject.toml .
 
 RUN poetry install
 COPY ./todo_app ./todo_app
+WORKDIR /todo_app
 
 FROM base as production
 ENTRYPOINT poetry run gunicorn --bind 0.0.0.0 "todo_app.app:create_app()"
