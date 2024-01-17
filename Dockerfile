@@ -15,3 +15,6 @@ EXPOSE 8000
 FROM base as development
 ENTRYPOINT poetry run flask run
 EXPOSE 8000 
+
+FROM base as test
+ENTRYPOINT poetry run pytest
