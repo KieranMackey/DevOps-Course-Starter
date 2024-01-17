@@ -47,5 +47,5 @@ def create_app():
         todo_items = todo_app.data.trello_items.get_items()
         return render_template('index.html', todo_items=todo_items)
     
-    
+    #useless comment to test GitHub action
     return app
