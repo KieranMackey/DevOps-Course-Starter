@@ -9,13 +9,13 @@ The project uses poetry for Python to create an isolated environment and manage 
 ### Poetry installation (Bash)
 
 ```bash
-curl -sSL https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py | python -
+curl -sSL https://install.python-poetry.org | python3 -
 ```
 
 ### Poetry installation (PowerShell)
 
 ```powershell
-(Invoke-WebRequest -Uri https://raw.githubusercontent.com/python-poetry/poetry/master/install-poetry.py -UseBasicParsing).Content | python -
+(Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | py -
 ```
 
 ## Dependencies
@@ -67,3 +67,18 @@ $ ansible-playbook my-ansible-playbook.yml -i my-ansible-inventory.yml
 ```
 ## Running tests
 To run unit and integration tests, run "pytest" in a terminal.
+
+## Running in Docker
+To build a docker image use command
+```bash
+$ docker build --target production --tag todo-app:prod .
+```
+
+To run image use command
+```bash
+$ docker run --env-file ./.env --publish 80:8000 todo-app:prod .
+```
+
+Connect to locahost:8000 to test
+
+Replace 'production'/'prod' with 'development'/'dev' for the dev container
