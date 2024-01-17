@@ -67,6 +67,7 @@ $ ansible-playbook my-ansible-playbook.yml -i my-ansible-inventory.yml
 ```
 ## Running tests
 To run unit and integration tests, run "pytest" in a terminal.
+Tests will also be run on GitHub when pushed to remote (see .github\workflows\my-ci-pipeline.yml)
 
 ## Running in Docker
 To build a docker image use command
